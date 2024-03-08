@@ -22,7 +22,7 @@ def run():
 
 
   st.write("Neel Iyer | MSEC Power of LLMs")
-  st.write("We explore the possibility of using large language models (LLMs) to reduce media subjectivity. Please input a demo article or piece of text below: ")
+  st.write("We explore the possibility of using large language models (LLMs) to reduce media subjectivity. Please input a demo article or piece of text below (Errors are likely due to harmful, inappropriate, or excessively long text inputs): ")
 
   prompt = st.chat_input("Say something")
   if prompt:
