@@ -1,51 +1,37 @@
-# Copyright (c) Streamlit Inc. (2018-2022) Snowflake Inc. (2022)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 import streamlit as st
 from streamlit.logger import get_logger
+from textblob import TextBlob
+import google.generativeai as genai
+
 
 LOGGER = get_logger(__name__)
 
 
 def run():
-    st.set_page_config(
-        page_title="Hello",
-        page_icon="👋",
+  st.set_page_config(
+        page_title="Power of LLMs",
+        page_icon="💻",
     )
 
-    st.write("# Welcome to Streamlit! 👋")
+  genai.configure(api_key=st.secrets["API_KEY"])
 
-    st.sidebar.success("Select a demo above.")
+  model = genai.GenerativeModel('gemini-pro')
 
-    st.markdown(
-        """
-        Streamlit is an open-source app framework built specifically for
-        Machine Learning and Data Science projects.
-        **👈 Select a demo from the sidebar** to see some examples
-        of what Streamlit can do!
-        ### Want to learn more?
-        - Check out [streamlit.io](https://streamlit.io)
-        - Jump into our [documentation](https://docs.streamlit.io)
-        - Ask a question in our [community
-          forums](https://discuss.streamlit.io)
-        ### See more complex demos
-        - Use a neural net to [analyze the Udacity Self-driving Car Image
-          Dataset](https://github.com/streamlit/demo-self-driving)
-        - Explore a [New York City rideshare dataset](https://github.com/streamlit/demo-uber-nyc-pickups)
-    """
-    )
+  #st.write(model.generate_content("whats ur name").text)
 
+
+
+  st.write("Neel Iyer | MSEC Power of LLMs")
+  st.write("We explore the possibility of using large language models (LLMs) to reduce media subjectivity. Please input a demo article or piece of text below: ")
+
+  prompt = st.chat_input("Say something")
+  if prompt:
+      st.write(f"Article Inputted: {prompt}")
+      st.write(f"Article Subjectivity (0.0-1.0):  {TextBlob(prompt).sentiment.subjectivity}")
+      prompt2 = "rewrite the following text to be concise, fact driven, objective, neutral statements that aren't lengthy. they shouldnt hold any political affiliation but be fact driven and short. u should have a formal, neutral tone and not express any one view but present both sides equally and fairly: "
+      response = model.generate_content(prompt2 + prompt)
+      st.write(f"Rewritten Article: {response.text}")
+      st.write(f"Rewritten Article Subjectivity (0.0-1.0): {TextBlob(response.text).sentiment.subjectivity}" )
 
 if __name__ == "__main__":
     run()
