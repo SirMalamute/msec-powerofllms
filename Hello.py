@@ -31,9 +31,10 @@ def run():
       prompt2 = "rewrite the following text to be concise, fact driven, objective, neutral statements that aren't lengthy. they shouldnt hold any political affiliation but be fact driven and short. u should have a formal, neutral tone and not express any one view but present both sides equally and fairly: "
       try:
         response = model.generate_content(prompt2 + prompt)
+        response = response.text
       except:
          response = "There was a model error. Likely due to hate speech, or content the model deemed unfriendly and not in alignment with its code of ethics. To gain better results, please paste a snapshot of a news article."
-      st.write(f"Rewritten Article: {response.text}")
+      st.write(f"Rewritten Article: {response}")
     #  st.write(f"Rewritten Article Subjectivity (0.0-1.0): {TextBlob(response.text).sentiment.subjectivity}" )
 
 if __name__ == "__main__":
